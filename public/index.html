@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket User Online</title>
+  </head>
+  <body>
+    <h1>Socket Connection Test</h1>
+    <input type="text" id="matriIdInput" placeholder="Enter your Matri ID" />
+    <button onclick="connectSocket()">Connect</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket;
+
+      function connectSocket() {
+        const matriId = document.getElementById("matriIdInput").value.trim();
+        if (!matriId) {
+          alert("Please enter a Matri ID");
+          return;
+        }
+
+        socket = io();
+
+        socket.on("connect", () => {
+          console.log("🔌 Connected:", socket.id);
+          socket.emit("register_user", matriId);
+        });
+
+        socket.on("disconnect", () => {
+          console.log("❌ Disconnected:", socket.id);
+        });
+      }
+    </script>
+  </body>
+</html>
