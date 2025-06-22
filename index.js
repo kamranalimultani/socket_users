@@ -7,7 +7,10 @@ const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, {
+  pingInterval: 10000,
+  pingTimeout: 5000,
+});
 
 // Serve frontend HTML
 app.use(express.static(path.join(__dirname, "public")));
