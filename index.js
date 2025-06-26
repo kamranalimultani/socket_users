@@ -93,7 +93,27 @@ io.on("connection", (socket) => {
     console.log("❌ Socket disconnected:", socket.id);
   });
 });
+app.get("/render", (req, res) => {
+  db.query(
+    "INSERT INTO render_cron (insert_date) VALUES (NOW())",
+    (err, result) => {
+      if (err) {
+        console.error(
+          "❌ Error inserting into render_cron:",
+          err.code,
+          err.message
+        );
+        return res.status(500).json({ error: err.message });
+      }
 
+      res.status(201).json({
+        message: "✅ Insert successful",
+        id: result.insertId,
+        insert_date: new Date().toISOString().slice(0, 19).replace("T", " "), // Return timestamp
+      });
+    }
+  );
+});
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
